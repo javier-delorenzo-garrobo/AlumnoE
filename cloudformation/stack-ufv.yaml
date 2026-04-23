@@ -279,7 +279,7 @@ Resources:
               listen 80;
               server_name _;
               location / {
-                  proxy_pass http://127.0.0.1:3000;
+                  proxy_pass http://127.0.0.1:3003;
                   proxy_http_version 1.1;
                   proxy_set_header Upgrade $http_upgrade;
                   proxy_set_header Connection 'upgrade';
@@ -333,7 +333,7 @@ Resources:
               listen 80;
               server_name _;
               location / {
-                  proxy_pass http://127.0.0.1:3000;
+                  proxy_pass http://127.0.0.1:3003;
                   proxy_http_version 1.1;
                   proxy_set_header Upgrade $http_upgrade;
                   proxy_set_header Connection 'upgrade';
@@ -352,6 +352,18 @@ Resources:
           systemctl restart sshd
           echo "UserData Practicas-2 OK"
 
+  EIPPracticas1:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref EC2Practicas1
+      Domain: vpc
+
+  EIPPracticas2:
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !Ref EC2Practicas2
+      Domain: vpc
+
 Outputs:
   VpcId:
     Value: !Ref VPC
@@ -369,7 +381,7 @@ Outputs:
     Value: 10.1.1.10
   EC2UFV2PrivateIp:
     Value: 10.1.1.11
-  EC2Practicas1PrivateIp:
-    Value: 10.1.1.14
-  EC2Practicas2PrivateIp:
-    Value: 10.1.1.15
+  EC2Practicas1PublicIp:
+    Value: !Ref EIPPracticas1
+  EC2Practicas2PublicIp:
+    Value: !Ref EIPPracticas2

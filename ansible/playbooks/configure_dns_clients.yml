@@ -11,7 +11,7 @@
   vars:
     dns_server_ip: "10.0.1.12"   # IP de DC01
     dns_domain:    "corp.ufv.local"
-    ntp_server_ip: "10.0.1.10"
+    ntp_server_ip: "10.0.1.12"
 
   tasks:
     - name: Configurar resolv.conf
