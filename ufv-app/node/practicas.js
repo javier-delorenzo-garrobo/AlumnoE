@@ -13,14 +13,19 @@ const s3 = new AWS.S3({ region: 'eu-south-2' });
 const BUCKET_NAME = 'entregas-practicas-ufv-equipo-e';
 
 const pool = new Pool({
-  host: '10.0.1.10',
-  user: 'backend',
-  password: 'backend_password',
-  database: 'ufv',
-  port: 5432,
+  host: process.env.DB_HOST || '10.0.1.10',
+  user: process.env.DB_USER || 'backend',
+  password: process.env.DB_PASS || 'ContraseñaSegura123',
+  database: process.env.DB_NAME || 'academico',
+  port: parseInt(process.env.DB_PORT || '5432'),
+  connectionTimeoutMillis: 3000,  // falla en 3s si la BD no es alcanzable
+  idleTimeoutMillis: 10000,
 });
 
 const upload = multer({ storage: multer.memoryStorage() });
+
+// Ruta raíz → redirige al módulo de prácticas
+app.get('/', (req, res) => res.redirect('/practicas'));
 
 app.get('/practicas', async (req, res) => {
   try {

@@ -73,7 +73,7 @@ JENKINSFILE_CONTENT=$(cat "$JENKINSFILE_PATH")
 JOB_CONFIG=$(cat << XMLEOF
 <?xml version='1.1' encoding='UTF-8'?>
 <flow-definition plugin="workflow-job">
-  <description>Pipeline despliegue multi-cuenta AWS (AlexPersonal + AlexUFV) con VPC Peering</description>
+  <description>Pipeline despliegue multi-cuenta AWS (EquipoEPersonal + EquipoEUFV) con VPC Peering</description>
   <keepDependencies>false</keepDependencies>
   <properties>
   </properties>

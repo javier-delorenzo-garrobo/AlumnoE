@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Stack AlexPersonal - VPC 10.0.0.0/16
+Description: Stack EquipoEPersonal - VPC 10.0.0.0/16
 
 Parameters:
   PeerVpcId:
@@ -165,13 +165,13 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     DependsOn: VPC
     Properties:
-      GroupDescription: SG Linux AlexPersonal
+      GroupDescription: SG Linux EquipoEPersonal
       VpcId: !Ref VPC
       SecurityGroupIngress:
         # Todo el trafico desde la maquina Jenkins/DevOps
         - {IpProtocol: -1, CidrIp: !Ref MyPublicIp, Description: "Todo desde Jenkins/DevOps"}
-        # Todo el trafico desde el peering con AlexUFV
-        - {IpProtocol: -1, CidrIp: 10.1.0.0/16, Description: "Todo desde AlexUFV via peering"}
+        # Todo el trafico desde el peering con EquipoEUFV
+        - {IpProtocol: -1, CidrIp: 10.1.0.0/16, Description: "Todo desde EquipoEUFV via peering"}
         # HTTP publico
         - {IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0, Description: "HTTP publico"}
       SecurityGroupEgress:
@@ -184,13 +184,13 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     DependsOn: VPC
     Properties:
-      GroupDescription: SG Windows DC01 AlexPersonal
+      GroupDescription: SG Windows DC01 EquipoEPersonal
       VpcId: !Ref VPC
       SecurityGroupIngress:
         # Todo el trafico desde la maquina Jenkins/DevOps
         - {IpProtocol: -1, CidrIp: !Ref MyPublicIp, Description: "Todo desde Jenkins/DevOps"}
-        # Todo el trafico desde el peering con AlexUFV
-        - {IpProtocol: -1, CidrIp: 10.1.0.0/16, Description: "Todo desde AlexUFV via peering"}
+        # Todo el trafico desde el peering con EquipoEUFV
+        - {IpProtocol: -1, CidrIp: 10.1.0.0/16, Description: "Todo desde EquipoEUFV via peering"}
         # Todo el trafico desde la propia VPC Personal (AD/DNS/NTP interno)
         - {IpProtocol: -1, CidrIp: 10.0.0.0/16, Description: "Todo desde VPC Personal"}
       SecurityGroupEgress:
@@ -343,7 +343,7 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn: SubnetRouteTableAssociation
     Properties:
-      InstanceType: t3.small
+      InstanceType: t3.micro
       KeyName: !Ref KeyPairName
       ImageId: !Ref AmiIdWindows
       SubnetId: !Ref SubnetPublic

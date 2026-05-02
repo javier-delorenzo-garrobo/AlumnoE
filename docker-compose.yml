@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins
+    container_name: local_jenkins
+    restart: unless-stopped
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      # Montamos el proyecto local en la ruta absoluta que esperan los scripts de la universidad
+      - ./:/usr/local/ufv/ufv-infra
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=true
+
+volumes:
+  jenkins_home:
+    name: jenkins_home_local
+
+# =====================================================================
+# INSTRUCCIONES PARA OBTENER LA CONTRASEÑA INICIAL:
+#
+# Una vez que levantes el contenedor con:
+#   docker compose up -d
+#
+# Puedes obtener la contraseña de administrador inicial ejecutando:
+#   docker exec local_jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+#
+# Otra opción es ver los logs del contenedor donde también se imprime:
+#   docker logs local_jenkins
+#
+# Y luego acceder a la interfaz web en:
+#   http://localhost:8080
+# =====================================================================

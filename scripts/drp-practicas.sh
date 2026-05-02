@@ -15,8 +15,8 @@ echo "[DRP] Iniciando proceso de Disaster Recovery para el modulo de Practicas..
 
 # 1. Recuperar los IDs de las instancias usando el Tag 'Name'
 echo "[DRP] Localizando instancias de practicas..."
-INSTANCE_1=$(aws ec2 describe-instances --profile $PROFILE --region $REGION --filters "Name=tag:Name,Values=ec2-practicas-1" "Name=instance-state-name,Values=running" --query "Reservations[0].Instances[0].InstanceId" --output text)
-INSTANCE_2=$(aws ec2 describe-instances --profile $PROFILE --region $REGION --filters "Name=tag:Name,Values=ec2-practicas-2" "Name=instance-state-name,Values=running" --query "Reservations[0].Instances[0].InstanceId" --output text)
+INSTANCE_1=$(aws ec2 describe-instances --profile $PROFILE --region $REGION --filters "Name=tag:Name,Values=equipoe-practicas-1" "Name=instance-state-name,Values=running" --query "Reservations[0].Instances[0].InstanceId" --output text)
+INSTANCE_2=$(aws ec2 describe-instances --profile $PROFILE --region $REGION --filters "Name=tag:Name,Values=equipoe-practicas-2" "Name=instance-state-name,Values=running" --query "Reservations[0].Instances[0].InstanceId" --output text)
 
 # 2. Crear AMIs (Snapshots) sin reiniciar la instancia
 DATE_STAMP=$(date +%Y%m%d-%H%M)

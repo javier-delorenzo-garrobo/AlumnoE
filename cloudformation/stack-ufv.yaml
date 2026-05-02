@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Stack AlexUFV - VPC 10.1.0.0/16
+Description: Stack EquipoEUFV - VPC 10.1.0.0/16
 
 Parameters:
   PeerVpcId:
@@ -95,13 +95,13 @@ Resources:
     Type: AWS::EC2::SecurityGroup
     DependsOn: VPC
     Properties:
-      GroupDescription: SG AlexUFV
+      GroupDescription: SG EquipoEUFV
       VpcId: !Ref VPC
       SecurityGroupIngress:
         # Todo el trafico desde la maquina Jenkins/DevOps
         - {IpProtocol: -1, CidrIp: !Ref MyPublicIp, Description: "Todo desde Jenkins/DevOps"}
-        # Todo el trafico desde el peering con AlexPersonal
-        - {IpProtocol: -1, CidrIp: 10.0.0.0/16, Description: "Todo desde AlexPersonal via peering"}
+        # Todo el trafico desde el peering con EquipoEPersonal
+        - {IpProtocol: -1, CidrIp: 10.0.0.0/16, Description: "Todo desde EquipoEPersonal via peering"}
         # HTTP publico
         - {IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0, Description: "HTTP publico"}
       SecurityGroupEgress:
@@ -248,7 +248,7 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn: SubnetRouteTableAssociation
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t3.micro
       KeyName: !Ref KeyPairName
       ImageId: !Ref AmiId
       SubnetId: !Ref SubnetPublic
@@ -302,7 +302,7 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn: SubnetRouteTableAssociation
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t3.micro
       KeyName: !Ref KeyPairName
       ImageId: !Ref AmiId
       SubnetId: !Ref SubnetPublic
