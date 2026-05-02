@@ -2,18 +2,18 @@
 # =============================================================
 # Playbook: deploy_app.yml
 # Despliega nginx config + web estaticos + servicio Node.js
-# AlexPersonal: nginx config + web public
-# AlexUFV:      nginx config + web public + node service
+# EquipoEPersonal: nginx config + web public
+# EquipoEUFV:      nginx config + web public + node service
 # =============================================================
 
-# ── AlexPersonal: nginx + estaticos ──────────────────────────
-- name: Desplegar nginx en AlexPersonal
+# ── EquipoEPersonal: nginx + estaticos ──────────────────────────
+- name: Desplegar nginx en EquipoEPersonal
   hosts: "linux_personal"
   gather_facts: yes
 
   vars:
-    src_nginx_conf: "/usr/local/ufv/ufv-infra/ufv-app/nginx/EquipoEPersonal_nginx.conf"
-    src_public:     "/usr/local/ufv/ufv-infra/ufv-app/public"
+    src_nginx_conf: "{{ playbook_dir }}/../../ufv-app/nginx/EquipoEPersonal_nginx.conf"
+    src_public:     "{{ playbook_dir }}/../../ufv-app/public"
     dst_public:     "/var/www/public"
     dst_nginx_conf: "/etc/nginx/nginx.conf"
 
@@ -61,19 +61,19 @@
         name: nginx
         state: reloaded
 
-# ── AlexUFV: nginx + estaticos + Node.js service ──────────────
-- name: Desplegar nginx y Node.js en AlexUFV
+# ── EquipoEUFV: nginx + estaticos + Node.js service ──────────────
+- name: Desplegar nginx y Node.js en EquipoEUFV
   hosts: linux_ufv
   gather_facts: yes
 
   vars:
-    src_nginx_conf:  "/usr/local/ufv/ufv-infra/ufv-app/nginx/EquipoEUFV_nginx.conf"
-    src_public:      "/usr/local/ufv/ufv-infra/ufv-app/public"
+    src_nginx_conf:  "{{ playbook_dir }}/../../ufv-app/nginx/EquipoEUFV_nginx.conf"
+    src_public:      "{{ playbook_dir }}/../../ufv-app/public"
     dst_public:      "/var/www/public"
     dst_nginx_conf:  "/etc/nginx/nginx.conf"
-    src_node_pkg:    "/usr/local/ufv/ufv-infra/ufv-app/node/package.json"
-    src_node_app:    "/usr/local/ufv/ufv-infra/ufv-app/node/profesores.js"
-    src_node_practicas: "/usr/local/ufv/ufv-infra/ufv-app/node/practicas.js"
+    src_node_pkg:    "{{ playbook_dir }}/../../ufv-app/node/package.json"
+    src_node_app:    "{{ playbook_dir }}/../../ufv-app/node/profesores.js"
+    src_node_practicas: "{{ playbook_dir }}/../../ufv-app/node/practicas.js"
     dst_node_dir:    "/usr/local/ufv/nodeService"
     node_service:    "ufvNodeService"
     node_practicas_service: "ufvPracticasService"

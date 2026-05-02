@@ -7,8 +7,8 @@ pipeline {
     
     parameters {
         string(name: 'MY_PUBLIC_IP',       defaultValue: '',                      description: 'Tu IP publica para SSH (vacio = autodetectar)')
-        string(name: 'KEY_PAIR_PERSONAL',  defaultValue: 'aws',                   description: 'Key Pair en AlexPersonal')
-        string(name: 'KEY_PAIR_UFV',       defaultValue: 'aws_ufv',               description: 'Key Pair en AlexUFV')
+        string(name: 'KEY_PAIR_PERSONAL',  defaultValue: 'llave-javier', description: 'Key Pair en EquipoEPersonal')
+        string(name: 'KEY_PAIR_UFV',       defaultValue: 'aws_ufv',               description: 'Key Pair en EquipoEUFV')
         string(name: 'AMI_LINUX',           defaultValue: 'ami-073422177b6b3ed22', description: 'AMI Amazon Linux 2023 eu-south-2')
         string(name: 'AMI_WINDOWS',        defaultValue: 'ami-0349104b138bf332c', description: 'AMI Windows Server 2019 eu-south-2')
         string(name: 'BACKUP_BUCKET',      defaultValue: 'ufv-postgres-backups',  description: 'Nombre del bucket S3 en eu-west-1 para backups de PostgreSQL')
@@ -18,13 +18,13 @@ pipeline {
     }
 
     environment {
-        AWS_PROFILE_PERSONAL = 'AlexPersonal'
-        AWS_PROFILE_UFV      = 'AlexUFV'
+        AWS_PROFILE_PERSONAL = 'EquipoEPersonal'
+        AWS_PROFILE_UFV      = 'EquipoEUFV'
         STACK_UFV_PREREQ     = 'stack-ufv-prereq'
         STACK_PERSONAL       = 'stack-personal'
         STACK_UFV            = 'stack-ufv'
-        CFN_PERSONAL = '/usr/local/ufv/ufv-infra/cloudformation/stack-personal.yaml'
-        CFN_UFV      = '/usr/local/ufv/ufv-infra/cloudformation/stack-ufv.yaml'
+        CFN_PERSONAL = "${WORKSPACE}/cloudformation/stack-personal.yaml"
+        CFN_UFV      = "${WORKSPACE}/cloudformation/stack-ufv.yaml"
         
         // ACTIVAMOS ANSI_COLOR
         ANSIBLE_FORCE_COLOR = 'true'
@@ -49,7 +49,7 @@ pipeline {
                         script: "aws sts get-caller-identity --profile ${AWS_PROFILE_UFV} --query Account --output text",
                         returnStdout: true).trim()
 
-                    echo "AlexPersonal: ${env.ACCOUNT_ID_PERSONAL} | AlexUFV: ${env.ACCOUNT_ID_UFV} | IP: ${env.DETECTED_IP}"
+                    echo "EquipoEPersonal: ${env.ACCOUNT_ID_PERSONAL} | EquipoEUFV: ${env.ACCOUNT_ID_UFV} | IP: ${env.DETECTED_IP}"
                 }
             }
         }
@@ -85,7 +85,7 @@ pipeline {
                 script {
                     def prereqTemplate = """
 AWSTemplateFormatVersion: '2010-09-09'
-Description: Rol IAM para aceptar VPC Peering desde AlexPersonal
+Description: Rol IAM para aceptar VPC Peering desde EquipoEPersonal
 Parameters:
   PersonalAccountId:
     Type: String
@@ -398,22 +398,22 @@ Outputs:
                     def ufvOut = sh(script: "aws cloudformation describe-stacks --stack-name ${STACK_UFV} --region ${params.AWS_REGION} --profile ${AWS_PROFILE_UFV} --query 'Stacks[0].Outputs' --output table", returnStdout: true).trim()
 
                     def ipsPersonal = sh(script: '''
-                        VPC_ID=$(aws ec2 describe-vpcs --profile AlexPersonal --region ''' + params.AWS_REGION + ''' \
+                        VPC_ID=$(aws ec2 describe-vpcs --profile EquipoEPersonal --region ''' + params.AWS_REGION + ''' \
                             --filters "Name=cidr,Values=10.0.0.0/16" "Name=isDefault,Values=false" \
                             --query 'Vpcs[0].VpcId' --output text)
                         aws ec2 describe-instances \
-                            --profile AlexPersonal --region ''' + params.AWS_REGION + ''' \
+                            --profile EquipoEPersonal --region ''' + params.AWS_REGION + ''' \
                             --filters "Name=vpc-id,Values=$VPC_ID" "Name=instance-state-name,Values=running" \
                             --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value|[0],PrivateIpAddress,PublicIpAddress]' \
                             --output table
                     ''', returnStdout: true).trim()
 
                     def ipsUFV = sh(script: '''
-                        VPC_ID=$(aws ec2 describe-vpcs --profile AlexUFV --region ''' + params.AWS_REGION + ''' \
+                        VPC_ID=$(aws ec2 describe-vpcs --profile EquipoEUFV --region ''' + params.AWS_REGION + ''' \
                             --filters "Name=cidr,Values=10.1.0.0/16" "Name=isDefault,Values=false" \
                             --query 'Vpcs[0].VpcId' --output text)
                         aws ec2 describe-instances \
-                            --profile AlexUFV --region ''' + params.AWS_REGION + ''' \
+                            --profile EquipoEUFV --region ''' + params.AWS_REGION + ''' \
                             --filters "Name=vpc-id,Values=$VPC_ID" "Name=instance-state-name,Values=running" \
                             --query 'Reservations[*].Instances[*].[Tags[?Key==`Name`].Value|[0],PrivateIpAddress,PublicIpAddress]' \
                             --output table
@@ -427,16 +427,16 @@ Outputs:
  CIDR Personal : 10.0.0.0/16
  CIDR UFV      : 10.1.0.0/16
 
- IPs AlexPersonal (Nombre | IP Privada | IP Publica):
+ IPs EquipoEPersonal (Nombre | IP Privada | IP Publica):
 ${ipsPersonal}
 
- IPs AlexUFV (Nombre | IP Privada | IP Publica):
+ IPs EquipoEUFV (Nombre | IP Privada | IP Publica):
 ${ipsUFV}
 
- Outputs AlexPersonal:
+ Outputs EquipoEPersonal:
 ${personalOut}
 
- Outputs AlexUFV:
+ Outputs EquipoEUFV:
 ${ufvOut}
 ==========================================================="""
                 }

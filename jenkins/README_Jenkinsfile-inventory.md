@@ -41,7 +41,7 @@ El pipeline ejecuta el script de inventario dinámico, valida su salida, y puede
 | `ANSIBLE_FORCE_COLOR` | `true` | Fuerza salida con colores en Ansible. |
 | `TERM` | `xterm` | Terminal para soporte de colores. |
 
-> **Nota:** Los perfiles AWS utilizados son `AlexPersonal` y `AlexUFV`, configurados en las credenciales del nodo Jenkins. La región por defecto es `eu-south-2`.
+> **Nota:** Los perfiles AWS utilizados son `EquipoEPersonal` y `EquipoEUFV`, configurados en las credenciales del nodo Jenkins. La región por defecto es `eu-south-2`.
 
 ---
 
@@ -49,7 +49,7 @@ El pipeline ejecuta el script de inventario dinámico, valida su salida, y puede
 
 ### 1. Verificar entorno Ansible
 - Muestra versiones de Ansible, Python y AWS CLI.
-- Verifica las credenciales de AWS para ambos perfiles (`AlexPersonal` y `AlexUFV`).
+- Verifica las credenciales de AWS para ambos perfiles (`EquipoEPersonal` y `EquipoEUFV`).
 - Confirma que se puede llamar a `aws sts get-caller-identity`.
 
 ### 2. Generar inventario dinámico
@@ -115,7 +115,7 @@ El pipeline aprovecha la ejecución paralela en la etapa de verificación de con
 ## Consideraciones Importantes
 
 - El script de inventario dinámico (`aws_inventory.sh`) debe estar correctamente configurado para consultar las instancias EC2 en las cuentas y regiones correspondientes.
-- Los perfiles AWS (`AlexPersonal` y `AlexUFV`) deben estar definidos en el nodo Jenkins donde se ejecuta el pipeline.
+- Los perfiles AWS (`EquipoEPersonal` y `EquipoEUFV`) deben estar definidos en el nodo Jenkins donde se ejecuta el pipeline.
 - Las pruebas de ping en Windows requieren que el módulo `ansible.windows.win_ping` esté disponible (incluido en `ansible.windows` collection).
 - Si algún host no responde al ping, la etapa no falla gracias al `|| true`, pero el error quedará registrado en los logs.
 - La recolección de *facts* (`SHOW_FACTS`) puede aumentar considerablemente el tiempo de ejecución si hay muchos hosts.

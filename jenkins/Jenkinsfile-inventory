@@ -18,9 +18,9 @@ pipeline {
     }
 
     environment {
-        ANSIBLE_DIR     = '/usr/local/ufv/ufv-infra/ansible'
-        ANSIBLE_CFG     = '/usr/local/ufv/ufv-infra/ansible/ansible.cfg'
-        INVENTORY       = '/usr/local/ufv/ufv-infra/ansible/inventory/aws_inventory.sh'
+        ANSIBLE_DIR     = "${WORKSPACE}/ansible"
+        ANSIBLE_CFG     = "${WORKSPACE}/ansible/ansible.cfg"
+        INVENTORY       = "${WORKSPACE}/ansible/inventory/aws_inventory.sh"
         
         // ACTIVAMOS ANSI_COLOR
         ANSIBLE_FORCE_COLOR = 'true'
@@ -37,8 +37,8 @@ pipeline {
                     python3 --version
                     aws --version
                     echo "=== Credenciales AWS ==="
-                    aws sts get-caller-identity --profile AlexPersonal --region eu-south-2
-                    aws sts get-caller-identity --profile AlexUFV      --region eu-south-2
+                    aws sts get-caller-identity --profile EquipoEPersonal --region eu-south-2
+                    aws sts get-caller-identity --profile EquipoEUFV      --region eu-south-2
                 '''
             }
         }

@@ -7,7 +7,7 @@
 
 ## Descripción General
 
-Este pipeline de Jenkins automatiza las operaciones de **backup y restauración** de una base de datos PostgreSQL, almacenando los *dumps* en un bucket S3 (`eu-west-1`). Está diseñado para el entorno de la cuenta `AlexPersonal` y permite:
+Este pipeline de Jenkins automatiza las operaciones de **backup y restauración** de una base de datos PostgreSQL, almacenando los *dumps* en un bucket S3 (`eu-west-1`). Está diseñado para el entorno de la cuenta `EquipoEPersonal` y permite:
 
 - Realizar un **dump** del esquema académico y subirlo a S3.
 - **Listar** los *dumps* disponibles en el bucket.
@@ -49,7 +49,7 @@ Además, incluye una etapa opcional para **crear el bucket** con políticas de s
 | `INVENTORY` | `.../inventory/aws_inventory.sh` | Script de inventario dinámico. |
 | `ANSIBLE_HOST_KEY_CHECKING` | `False` | Deshabilita verificación de host keys. |
 | `ANSIBLE_COLLECTIONS_PATHS` | (varias rutas) | Rutas donde buscar colecciones de Ansible. |
-| `AWS_PROFILE` | `AlexPersonal` | Perfil AWS utilizado para operaciones con S3. |
+| `AWS_PROFILE` | `EquipoEPersonal` | Perfil AWS utilizado para operaciones con S3. |
 | `AWS_REGION_BUCKET` | `eu-west-1` | Región donde se encuentra el bucket S3. |
 | `ANSIBLE_FORCE_COLOR` | `true` | Fuerza salida con colores en Ansible. |
 | `TERM` | `xterm` | Terminal para soporte de colores. |
@@ -62,7 +62,7 @@ Además, incluye una etapa opcional para **crear el bucket** con políticas de s
 - Muestra la acción seleccionada y el nombre del bucket.
 - Asigna permisos de ejecución al script de inventario.
 - Filtra y muestra los hosts con etiqueta `postgres` en el inventario.
-- Verifica las credenciales AWS con `aws sts get-caller-identity` usando el perfil `AlexPersonal` y la región `eu-west-1`.
+- Verifica las credenciales AWS con `aws sts get-caller-identity` usando el perfil `EquipoEPersonal` y la región `eu-west-1`.
 
 ### 2. Crear bucket S3 (opcional)
 - *Solo si `CREATE_BUCKET_IF_NOT_EXISTS = true`.*
@@ -126,7 +126,7 @@ Además, incluye una etapa opcional para **crear el bucket** con políticas de s
 
 ## Consideraciones Importantes
 
-- **Credenciales AWS**: El pipeline usa el perfil `AlexPersonal`. Asegúrate de que esté configurado en el nodo Jenkins y tenga permisos para S3 (`s3:CreateBucket`, `s3:PutObject`, `s3:GetObject`, `s3:ListBucket`) y para ejecutar `sts:GetCallerIdentity`.
+- **Credenciales AWS**: El pipeline usa el perfil `EquipoEPersonal`. Asegúrate de que esté configurado en el nodo Jenkins y tenga permisos para S3 (`s3:CreateBucket`, `s3:PutObject`, `s3:GetObject`, `s3:ListBucket`) y para ejecutar `sts:GetCallerIdentity`.
 - **Región del bucket**: El bucket se crea en `eu-west-1` y las operaciones se realizan contra esa región. Asegúrate de que el playbook de Ansible tenga acceso a la base de datos en la misma región (o en una accesible por red).
 - **Políticas de seguridad**: Al crear el bucket, se bloquea el acceso público y se habilita versionado. Esto evita pérdidas accidentales y garantiza la seguridad de los backups.
 - **Ciclo de vida**: Los *dumps* se moverán a Glacier después de 30 días y se borrarán después de 365 días. Ajusta estos valores en el código si es necesario.

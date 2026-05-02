@@ -130,7 +130,7 @@ Si se selecciona `all`, los playbooks se ejecutan en este orden:
 ## Consideraciones Importantes
 
 - **Inventario dinámico**: El script `aws_inventory.sh` debe estar configurado correctamente y ser ejecutable.
-- **Credenciales AWS**: Se asume que los perfiles `AlexPersonal` y `AlexUFV` están configurados en el nodo Jenkins.
+- **Credenciales AWS**: Se asume que los perfiles `EquipoEPersonal` y `EquipoEUFV` están configurados en el nodo Jenkins.
 - **Modo `--check`**: Ansible no aplicará cambios, pero puede haber efectos colaterales si los playbooks usan módulos que no soportan check mode (como `command` o `shell`).
 - **Parámetros de AD**: La contraseña del modo seguro está hardcodeada; en entornos productivos se debe externalizar a variables de Jenkins o a Vault.
 - **Colecciones de Ansible**: La variable `ANSIBLE_COLLECTIONS_PATHS` incluye rutas específicas; verificar que las colecciones requeridas estén instaladas.

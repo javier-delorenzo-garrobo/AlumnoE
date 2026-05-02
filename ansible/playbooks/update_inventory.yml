@@ -57,7 +57,7 @@
            INVENTARIO AWS - {{ lookup('pipe', 'date') }}
           ============================================================
 
-          --- AlexPersonal (10.0.0.0/16) ---
+          --- EquipoEPersonal (10.0.0.0/16) ---
           {% for host in groups['linux_personal'] | default([]) %}
             [Linux] {{ hostvars[host]['instance_name'] | default('N/A') }}
                     IP: {{ host }}
@@ -70,7 +70,7 @@
                       Estado: {{ 'ACCESIBLE' if hostvars[host].get('ansible_hostname') else 'NO ACCESIBLE' }}
           {% endfor %}
 
-          --- AlexUFV (10.1.0.0/16) ---
+          --- EquipoEUFV (10.1.0.0/16) ---
           {% for host in groups['linux_ufv'] | default([]) %}
             [Linux] {{ hostvars[host]['instance_name'] | default('N/A') }}
                     IP: {{ host }}
@@ -108,5 +108,5 @@
 
           [postgres:children]
           linux_personal
-        dest: /usr/local/ufv/ufv-infra/ansible/inventory/current_inventory.ini
+        dest: "{{ playbook_dir }}/../inventory/current_inventory.ini"
       delegate_to: localhost

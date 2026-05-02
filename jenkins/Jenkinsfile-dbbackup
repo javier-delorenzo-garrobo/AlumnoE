@@ -47,12 +47,12 @@ pipeline {
     }
 
     environment {
-        ANSIBLE_DIR               = '/usr/local/ufv/ufv-infra/ansible'
-        ANSIBLE_CFG               = '/usr/local/ufv/ufv-infra/ansible/ansible.cfg'
-        INVENTORY                 = '/usr/local/ufv/ufv-infra/ansible/inventory/aws_inventory.sh'
+        ANSIBLE_DIR               = "${WORKSPACE}/ansible"
+        ANSIBLE_CFG               = "${WORKSPACE}/ansible/ansible.cfg"
+        INVENTORY                 = "${WORKSPACE}/ansible/inventory/aws_inventory.sh"
         ANSIBLE_HOST_KEY_CHECKING = 'False'
         ANSIBLE_COLLECTIONS_PATHS = '/usr/local/ufv/ansible_venv/lib/python3.12/site-packages/ansible_collections:/home/ua4192/.ansible/collections:/usr/share/ansible/collections'
-        AWS_PROFILE               = 'AlexPersonal'
+        AWS_PROFILE               = 'EquipoEPersonal'
         AWS_REGION_BUCKET         = 'eu-west-1'
         
         // ACTIVAMOS ANSI_COLOR
